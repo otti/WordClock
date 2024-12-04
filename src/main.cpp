@@ -61,8 +61,9 @@ typedef struct
 }sWord_t;
 
 
-sWord_t ES        = {0,  0, 2};
-sWord_t IST       = {0,  3, 3};
+sWord_t ES      = {0,  0, 2};
+sWord_t IST     = {0,  3, 3};
+sWord_t EIN     = {5,  0, 3};
 #define DOT_1     {10, 2, 1}
 #define DOT_2     {10, 3, 1}
 #define DOT_3     {10, 0, 1}
@@ -249,7 +250,10 @@ void UpdateDisplay(uint8_t Hour, uint8_t Min)
   if( Hour >= 12 ) // 13 Uhr --> 1 Uhr
     Hour -= 12;
 
-  SetPixels(&HOURS[Hour]);
+  if( (Hour == 1) && (Min < 5) ) // Special case 
+    SetPixels(&EIN);            // "ES IST EIN UHR" und nicht "ES IST EINS UHR"
+  else
+    SetPixels(&HOURS[Hour]);
 
   for(int i=0; i<NO_OF_LEDS; i++)
   {
